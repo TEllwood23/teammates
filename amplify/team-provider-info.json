@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-teammates-dev-626f1-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725201892:role/amplify-teammates-dev-626f1-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725201892:role/amplify-teammates-dev-626f1-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-teammates-dev-626f1-deployment",
+      "UnauthRoleName": "amplify-teammates-dev-626f1-unauthRole",
+      "StackName": "amplify-teammates-dev-626f1",
+      "StackId": "arn:aws:cloudformation:eu-north-1:851725201892:stack/amplify-teammates-dev-626f1/2e199810-1834-11ef-a471-0a6618daa9a5",
+      "AmplifyAppId": "dp6g2dqibcrd8"
+    }
+  }
+}
