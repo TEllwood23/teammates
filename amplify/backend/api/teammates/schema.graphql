@@ -1,19 +1,15 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
 type User @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   username: String!
   email: String!
-  favoriteTeams: [Team] @hasMany(name: "UserFavoriteTeams")
-  searchHistory: [Search] @hasMany(name: "UserSearchHistory")
+  favouriteTeams: [Team] @hasMany(indexName: "byUser", fields: ["id"])
+  searchHistory: [Search] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
 type Team @model {
   id: ID!
   name: String!
-  players: [Player] @hasMany(name: "TeamPlayers")
+  players: [Player] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
 type Player @model {
@@ -25,11 +21,11 @@ type Player @model {
 
 type Search @model {
   id: ID!
-  userID: ID!
+  userID: ID! @belongsTo(fields: ["userID"])
   team1: String!
   team2: String!
   timestamp: AWSDateTime!
-  commonPlayers: [Player] @manyToMany(name: "SearchCommonPlayers")
+  commonPlayers: [Player] @manyToMany(relationName: "SearchCommonPlayers")
 }
 
 type Query {
