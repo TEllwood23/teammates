@@ -1,15 +1,13 @@
-/* Configured to import styles from Tailwind */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom global styles below */
+/* Custom global styles */
 body {
-  @apply bg-background text-secondary;
-  font-family: 'Inter', sans-serif;
+  @apply bg-background text-secondary; /* Apply custom background and text colors */
+  font-family: 'Inter', sans-serif; /* Apply a custom font family */
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @apply text-primary;
+  @apply text-primary; /* Apply custom primary color to all headings */
 }
