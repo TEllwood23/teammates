@@ -6,15 +6,14 @@ type User @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   username: String!
   email: String!
-  favoritePlayers: [Player] @connection(name: "UserFavoritePlayers")
-  favoriteTeams: [Team] @connection(name: "UserFavoriteTeams")
-  searchHistory: [Search] @connection(name: "UserSearchHistory")
+  favoriteTeams: [Team] @hasMany(name: "UserFavoriteTeams")
+  searchHistory: [Search] @hasMany(name: "UserSearchHistory")
 }
 
 type Team @model {
   id: ID!
   name: String!
-  players: [Player] @connection(name: "TeamPlayers")
+  players: [Player] @hasMany(name: "TeamPlayers")
 }
 
 type Player @model {
@@ -30,7 +29,7 @@ type Search @model {
   team1: String!
   team2: String!
   timestamp: AWSDateTime!
-  commonPlayers: [Player] @connection(name: "SearchCommonPlayers")
+  commonPlayers: [Player] @manyToMany(name: "SearchCommonPlayers")
 }
 
 type Query {
