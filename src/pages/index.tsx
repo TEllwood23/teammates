@@ -36,7 +36,7 @@ export default function Home() {
           />
         </div>
         <Link href={`/compare?team1=${team1}&team2=${team2}`}>
-          <a className="px-4 py-2 bg-blue-500 text-white rounded-lg">Compare</a>
+          <div className="px-4 py-2 bg-blue-500 text-white rounded-lg">Compare</div>
         </Link>
       </form>
     </div>
