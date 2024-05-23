@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { generateClient } from '@aws-amplify/api';
-import  Auth  from '@aws-amplify/auth';
+import { API, Auth } from 'aws-amplify';
 import { useRouter } from 'next/router';
 import { getCommonPlayers, listSearches } from '../graphql/queries';
 import { createSearch } from '../graphql/mutations';
@@ -13,7 +12,7 @@ interface Player {
 }
 
 interface Search {
-  searchId: string;
+  id: string;
   team1: string;
   team2: string;
   timestamp: string;
@@ -25,36 +24,34 @@ export default function Compare() {
   const [commonPlayers, setCommonPlayers] = useState<Player[]>([]);
   const [previousSearches, setPreviousSearches] = useState<Search[]>([]);
 
-  const client = generateClient();
-
   useEffect(() => {
     const fetchPreviousSearches = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
         const userId = user.username;
-        const result = await client.graphql({
+        const result = await API.graphql({
           query: listSearches,
           variables: { filter: { userID: { eq: userId } } }
-        }) as any;
+        }) as { data: { listSearches: { items: Search[] } } };
         setPreviousSearches(result.data.listSearches.items);
       } catch (error) {
-        console.log('User not logged in');
+        console.log('User not logged in', error);
       }
     };
 
     const fetchData = async () => {
       if (team1 && team2) {
         try {
-          const result = await client.graphql({
+          const result = await API.graphql({
             query: getCommonPlayers,
             variables: { team1: team1 as string, team2: team2 as string }
-          }) as any;
+          }) as { data: { getCommonPlayers: Player[] } };
           setCommonPlayers(result.data.getCommonPlayers);
 
           // Save the search to the user's search history
           const user = await Auth.currentAuthenticatedUser();
           const userId = user.username;
-          await client.graphql({
+          await API.graphql({
             query: createSearch,
             variables: {
               input: {
@@ -92,7 +89,7 @@ export default function Compare() {
         <h2 className="text-xl font-bold">Previous Searches</h2>
         <ul>
           {previousSearches.map(search => (
-            <li key={search.searchId}>{search.team1} vs {search.team2} - {new Date(search.timestamp).toLocaleString()}</li>
+            <li key={search.id}>{search.team1} vs {search.team2} - {new Date(search.timestamp).toLocaleString()}</li>
           ))}
         </ul>
       </div>

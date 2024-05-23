@@ -9,11 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-amplify/api": "^6.0.33",
+    "@aws-amplify/api": "^6.0.34",
     "@aws-amplify/api-graphql": "^4.1.2",
-    "@aws-amplify/auth": "^6.3.2",
+    "@aws-amplify/auth": "^6.3.3",
     "@aws-amplify/ui-react": "^6.1.12",
-    "aws-amplify": "^6.3.2",
+    "aws-amplify": "^6.3.3",
+    "graphql-tag": "^2.12.5",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",

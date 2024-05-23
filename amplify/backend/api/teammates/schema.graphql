@@ -6,22 +6,29 @@ type User @model @auth(rules: [{ allow: owner }]) {
   searchHistory: [Search] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
-type Team @model {
+type Team @model @auth(rules: [
+  { allow: public, operations: [read] },
+  { allow: owner, operations: [create, update, delete] }
+]) {
   id: ID!
   name: String!
   players: [Player] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
-type Player @model {
+type Player @model @auth(rules: [
+  { allow: public, operations: [read] },
+  { allow: owner, operations: [create, update, delete] }
+]) {
   id: ID!
   name: String!
   position: String
-  teamID: ID! @index(name: "byTeam", queryField: "playersByTeam")
+  teamID: ID! @index(name: "byTeam")
+  commonSearches: [Search] @manyToMany(relationName: "SearchCommonPlayers")
 }
 
-type Search @model {
+type Search @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  userID: ID! @belongsTo(fields: ["userID"])
+  userID: ID! @index(name: "byUser")
   team1: String!
   team2: String!
   timestamp: AWSDateTime!
@@ -29,12 +36,12 @@ type Search @model {
 }
 
 type Query {
-  getCommonPlayers(team1: String!, team2: String!): [Player]
+  getCommonPlayers(team1: String!, team2: String!): [Player] @auth(rules: [{ allow: public }])
 }
 
 type Mutation {
-  createUser(username: String!, email: String!): User
-  createTeam(name: String!): Team
-  createPlayer(name: String!, position: String, teamID: ID!): Player
-  createSearch(userID: ID!, team1: String!, team2: String!, commonPlayers: [ID!]): Search
+  createUser(username: String!, email: String!): User @auth(rules: [{ allow: public }])
+  createTeam(name: String!): Team @auth(rules: [{ allow: owner }])
+  createPlayer(name: String!, position: String, teamID: ID!): Player @auth(rules: [{ allow: owner }])
+  createSearch(userID: ID!, team1: String!, team2: String!, commonPlayers: [ID!]): Search @auth(rules: [{ allow: owner }])
 }
