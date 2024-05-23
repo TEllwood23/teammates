@@ -1,6 +1,5 @@
-import { Authenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { defineAuth } from 'aws-amplify/auth';
+import { Auth } from 'aws-amplify/auth';
 import { generateClient } from '@aws-amplify/api';
 import config from './src/aws-exports'; // Adjust the path as necessary
 import { createTeam } from './src/graphql/mutations';
@@ -11,13 +10,13 @@ const client = generateClient();
 
 const signInUser = async () => {
   try {
-    const user = await defineAuth.signIn({
+    const user = await Auth.signIn({
       username: 'test@email.com',
       password: 'testpassword'
     });
 
     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      const completedUser = await defineAuth.completeNewPassword(
+      const completedUser = await Auth.completeNewPassword(
         user, // the Cognito User Object
         'newtestpassword', // the new password
         {} // required attributes if any
